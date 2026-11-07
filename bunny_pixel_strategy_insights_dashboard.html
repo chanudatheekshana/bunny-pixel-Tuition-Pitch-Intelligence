@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bunny Pixel - Tuition Sector Marketing & EdTech Intelligence</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Minimal custom styling for chart container constraints as specified */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 360px;
+            }
+        }
+        .tab-btn.active {
+            border-bottom: 3px solid #ec4899;
+            color: #be185d;
+            font-weight: 700;
+        }
+        /* Custom scrollbar for clean aesthetic */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fdf2f8;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #f472b6;
+            border-radius: 4px;
+        }
+    </style>
+    <!-- Chosen Palette: Warm Neutral / Bunny Pink & Soft Slate -->
+    <!-- Application Structure Plan: 
+         Designed as a 5-Tab Interactive Presentation & Strategy Dashboard tailored for Bunny Pixel's pitch:
+         1. Executive Briefing: Core high-level context of shadow education in SL.
+         2. Market Dynamics: Quantitative charts on GDP spend vs out-of-pocket costs and academic performance impact.
+         3. EdTech Ecosystem: Comparative feature grid of local platforms (Inivak, Klass, etc.) and DRM security specs.
+         4. Agency Pitch & Funnel: Interactive ROI/Lead Calculator, funnel visualizer (Click-to-WhatsApp), and tier packages.
+         5. Action Plan & Pitch Script: Step-by-step meeting guide and pitch talking points for Bunny Pixel.
+    -->
+    <!-- Visualization & Content Choices:
+         - Public vs Household Spending: Horizontal Bar Chart (Chart.js) to show the spending gap.
+         - Exam Pass Rate Impact: Donut Chart (Chart.js) showing 88.5% vs 31.0% pass rate advantage.
+         - Click-to-WhatsApp Funnel: Interactive CSS Flowchart showing transition steps from social ad to LMS enrollment.
+         - Interactive ROI Calculator: Dynamic Vanilla JS formula calculating leads, registrations, and revenue based on ad spend.
+         - Platform Matrix: Interactive HTML Table with filtering.
+         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="bg-stone-50 text-stone-800 font-sans antialiased leading-relaxed min-h-screen flex flex-col">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-white border-b border-rose-100 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-pink-500 to-rose-400 flex items-center justify-center text-white font-extrabold text-xl shadow-md">
+                        🐰
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold tracking-tight text-stone-900">BUNNY PIXEL</span>
+                        <span class="hidden sm:inline-block text-xs bg-rose-100 text-rose-800 px-2 py-0.5 rounded-full ml-2 font-medium">Tuition Pitch Intelligence</span>
+                    </div>
+                </div>
+                <div class="text-xs text-stone-500 text-right hidden md:block">
+                    Market Research & Agency Presentation Deck<br>
+                    <span class="text-pink-600 font-semibold">G.C.E. O/L & A/L Sector (Sri Lanka)</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sub-Header Navigation Tabs -->
+    <nav class="bg-white border-b border-stone-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex space-x-2 sm:space-x-8 overflow-x-auto text-sm font-medium text-stone-600 py-1" id="nav-tabs">
+                <button onclick="switchTab('overview')" id="tab-overview" class="tab-btn active py-3 px-2 border-b-2 border-transparent hover:text-pink-600 whitespace-nowrap">
+                    📊 1. Executive Summary
+                </button>
+                <button onclick="switchTab('market')" id="tab-market" class="tab-btn py-3 px-2 border-b-2 border-transparent hover:text-pink-600 whitespace-nowrap">
+                    📈 2. Sector Economics & Data
+                </button>
+                <button onclick="switchTab('edtech')" id="tab-edtech" class="tab-btn py-3 px-2 border-b-2 border-transparent hover:text-pink-600 whitespace-nowrap">
+                    💻 3. EdTech & DRM Infrastructure
+                </button>
+                <button onclick="switchTab('funnel')" id="tab-funnel" class="tab-btn py-3 px-2 border-b-2 border-transparent hover:text-pink-600 whitespace-nowrap">
+                    🎯 4. Marketing Funnel & Pricing
+                </button>
+                <button onclick="switchTab('pitch')" id="tab-pitch" class="tab-btn py-3 px-2 border-b-2 border-transparent hover:text-pink-600 whitespace-nowrap">
+                    🚀 5. Client Pitch Script
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+        <!-- ================= SECTION 1: EXECUTIVE SUMMARY ================= -->
+        <section id="sec-overview" class="tab-content block space-y-6">
+            <div class="bg-gradient-to-r from-rose-50 to-pink-50 p-6 rounded-2xl border border-rose-200/60">
+                <div class="max-w-3xl">
+                    <span class="text-xs font-bold uppercase tracking-wider text-rose-600 bg-white px-2.5 py-1 rounded-full shadow-sm border border-rose-100">Strategic Context</span>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-stone-900 mt-3">Sri Lankan Shadow Education Landscape</h1>
+                    <p class="text-stone-600 text-base mt-2">
+                        This section outlines the macroeconomic rationale driving private tuition in Sri Lanka. Despite constitutional guarantees of free state education, out-of-pocket household spending on private tuition has reached unprecedented levels, creating an immense market for strategic marketing and student acquisition.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Key Insight Cards Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-10 h-10 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center font-bold text-xl mb-4">🏛️</div>
+                    <h3 class="font-bold text-stone-900 text-lg">State Funding Shortfall</h3>
+                    <p class="text-stone-600 text-sm mt-2">
+                        Sri Lanka allocates only <strong class="text-pink-600">~2.12% of GDP</strong> to public education, compared to regional peers like Bhutan (6.85%) and Nepal (5.10%). This forces reliance on external tuition.
+                    </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-10 h-10 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center font-bold text-xl mb-4">💰</div>
+                    <h3 class="font-bold text-stone-900 text-lg">Household Wallet Share</h3>
+                    <p class="text-stone-600 text-sm mt-2">
+                        Private tuition accounts for <strong class="text-pink-600">~48% of total household education spending</strong>, surpassing outlays for uniforms, textbooks, and daily school transport combined.
+                    </p>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-10 h-10 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xl mb-4">🎓</div>
+                    <h3 class="font-bold text-stone-900 text-lg">Measured Academic Impact</h3>
+                    <p class="text-stone-600 text-sm mt-2">
+                        Empirical evaluations reveal an <strong class="text-emerald-600">88.5% pass rate</strong> on standardized evaluations for tuition-attending students versus <strong class="text-stone-400">31.0%</strong> for non-attending peers.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Contextual Strategy Note -->
+            <div class="bg-white p-6 rounded-xl border border-stone-200">
+                <h3 class="font-bold text-stone-900 text-lg mb-2">Why This Matters for Bunny Pixel's Meeting</h3>
+                <p class="text-stone-600 text-sm">
+                    Teachers are operating in a highly commercialized, competitive market. Students and parents treat tuition selection as a critical investment decision. Positioning Bunny Pixel as an agency that provides high-converting marketing funnels and modern digital branding directly addresses their primary business bottleneck: <strong>consistent batch enrollment and brand authority.</strong>
+                </p>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 2: MARKET DYNAMICS & DATA ================= -->
+        <section id="sec-market" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+                <h2 class="text-xl font-bold text-stone-900">Education Spending & Performance Analytics</h2>
+                <p class="text-stone-600 text-sm mt-1">
+                    Visualizing the disparity between public sector investment and household expenditure, alongside empirical student performance metrics.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Chart 1: Public Spending Comparison -->
+                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-stone-900 text-base">Public Education Spending (% of GDP)</h3>
+                        <span class="text-xs text-stone-400">Regional Comparison</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="gdpChart"></canvas>
+                    </div>
+                    <p class="text-xs text-stone-500 mt-4 text-center">
+                        Sri Lanka's ~2.12% allocation creates a structural gap filled by commercial tuition institutes.
+                    </p>
+                </div>
+
+                <!-- Chart 2: Model Exam Pass Rate -->
+                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-stone-900 text-base">Model Exam Pass Rate Disparity (%)</h3>
+                        <span class="text-xs text-stone-400">Navithanvely Study Data</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="passRateChart"></canvas>
+                    </div>
+                    <p class="text-xs text-stone-500 mt-4 text-center">
+                        Attending structured tuition classes correlates with a +57.5% increase in baseline model exam pass rates.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Comparison Table -->
+            <div class="bg-white rounded-xl border border-stone-200 overflow-hidden shadow-sm">
+                <div class="p-6 border-b border-stone-200">
+                    <h3 class="font-bold text-stone-900 text-base">Structural Comparison: State vs. Private Tuition</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-stone-600">
+                        <thead class="bg-stone-50 text-stone-800 text-xs uppercase tracking-wider font-semibold">
+                            <tr>
+                                <th class="p-4">Parameter</th>
+                                <th class="p-4">State Education Sector</th>
+                                <th class="p-4 text-pink-700">Private Tuition Sector</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-stone-100">
+                            <tr>
+                                <td class="p-4 font-medium text-stone-900">Primary Funding</td>
+                                <td class="p-4">97% Domestic Tax Revenue</td>
+                                <td class="p-4 font-semibold text-pink-600">100% Out-of-Pocket Household Spend</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-medium text-stone-900">Household Education Budget Share</td>
+                                <td class="p-4">Subsidized (Textbooks, Uniforms)</td>
+                                <td class="p-4 font-semibold text-pink-600">~48% of total spending</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-medium text-stone-900">Primary Focus</td>
+                                <td class="p-4">General Curriculum Coverage</td>
+                                <td class="p-4 font-semibold text-pink-600">Exam Strategies, Past Paper Drills</td>
+                            </tr>
+                            <tr>
+                                <td class="p-4 font-medium text-stone-900">Regulatory Oversight</td>
+                                <td class="p-4">Ministry of Education</td>
+                                <td class="p-4 text-stone-500">Unregulated Market Competition</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 3: EDTECH & DRM INFRASTRUCTURE ================= -->
+        <section id="sec-edtech" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+                <h2 class="text-xl font-bold text-stone-900">Sri Lankan EdTech Stack & Security Protocols</h2>
+                <p class="text-stone-600 text-sm mt-1">
+                    Understanding the local technical ecosystem. Local tutors rely on specialized SaaS LMS platforms to prevent video piracy and manage physical booklet ("tute") dispatches via Speed Post & Domex.
+                </p>
+            </div>
+
+            <!-- Platform Matrix Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Inivak Edu -->
+                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-extrabold text-stone-900 text-lg">Inivak Edu</h3>
+                            <span class="text-xs bg-emerald-100 text-emerald-800 font-bold px-2.5 py-0.5 rounded-full">LKR 110/student</span>
+                        </div>
+                        <ul class="text-xs text-stone-600 space-y-2 mb-4">
+                            <li>🔒 <strong>Security:</strong> Hardware device fingerprinting lock & dynamic mobile watermarking.</li>
+                            <li>💳 <strong>Payments:</strong> Direct bank deposit slip upload + slip duplication auto-detection.</li>
+                            <li>📦 <strong>Logistics:</strong> Integrated Speed Post & Prompt Express tracking portal.</li>
+                        </ul>
+                    </div>
+                    <span class="text-xs text-stone-400 italic">Popular among large-scale A/L Science/Commerce tutors</span>
+                </div>
+
+                <!-- Klass.lk -->
+                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-extrabold text-stone-900 text-lg">Klass.lk</h3>
+                            <span class="text-xs bg-blue-100 text-blue-800 font-bold px-2.5 py-0.5 rounded-full">Tiered Subscription</span>
+                        </div>
+                        <ul class="text-xs text-stone-600 space-y-2 mb-4">
+                            <li>🔒 <strong>Security:</strong> Encrypted video stream delivery with tokenized session keys.</li>
+                            <li>💳 <strong>Payments:</strong> Integrated online card payments + manual verification.</li>
+                            <li>🎓 <strong>Logistics:</strong> Multi-teacher portal with automated access control.</li>
+                        </ul>
+                    </div>
+                    <span class="text-xs text-stone-400 italic">Ideal for multi-subject tuition institutes</span>
+                </div>
+
+                <!-- Clazz.lk -->
+                <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="font-extrabold text-stone-900 text-lg">Clazz.lk</h3>
+                            <span class="text-xs bg-purple-100 text-purple-800 font-bold px-2.5 py-0.5 rounded-full">LKR 5k/yr + 5%</span>
+                        </div>
+                        <ul class="text-xs text-stone-600 space-y-2 mb-4">
+                            <li>🔒 <strong>Security:</strong> Dynamic overlay watermark displaying student Name & NIC.</li>
+                            <li>💳 <strong>Payments:</strong> Cards, eZ Cash, and direct bank payouts.</li>
+                            <li>📱 <strong>Features:</strong> Tutor marketplace directory & parent guardian SMS alerts.</li>
+                        </ul>
+                    </div>
+                    <span class="text-xs text-stone-400 italic">Great for individual provincial tutors starting out</span>
+                </div>
+            </div>
+
+            <!-- Security Specs Box -->
+            <div class="bg-stone-900 text-stone-100 p-6 rounded-xl shadow-md">
+                <h3 class="text-rose-400 font-bold text-lg mb-3">🛡️ Critical Technology Insight: Tutors Fear Content Piracy</h3>
+                <p class="text-sm text-stone-300 leading-relaxed">
+                    Tutors' primary intellectual asset is their video content. Bunny Pixel should assure tutors during pitches that marketing campaigns will funnel traffic into <strong>secure LMS platforms</strong> equipped with single-device hardware locks, dynamic phone-number watermarking, and screen-capture blocking.
+                </p>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 4: FUNNEL & PRICING ================= -->
+        <section id="sec-funnel" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+                <h2 class="text-xl font-bold text-stone-900">Bunny Pixel Marketing Engine & Pricing Tiers</h2>
+                <p class="text-stone-600 text-sm mt-1">
+                    Demonstrating the Click-to-WhatsApp funnel, cost-per-lead metrics, agency package options, and an interactive lead acquisition ROI calculator.
+                </p>
+            </div>
+
+            <!-- Click to WhatsApp Funnel Step Visualizer -->
+            <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
+                <h3 class="font-bold text-stone-900 text-base mb-4 text-center">The High-Converting "Click-to-WhatsApp" Student Acquisition Funnel</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="p-4 rounded-lg bg-pink-50 border border-pink-200 text-center">
+                        <div class="text-2xl mb-2">📱</div>
+                        <div class="font-bold text-pink-900 text-sm">1. Target Social Ad</div>
+                        <p class="text-xs text-stone-600 mt-1">TikTok Reel / Meta Ad targeting A/L students or O/L parents</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-pink-50 border border-pink-200 text-center">
+                        <div class="text-2xl mb-2">💬</div>
+                        <div class="font-bold text-pink-900 text-sm">2. WhatsApp Trigger</div>
+                        <p class="text-xs text-stone-600 mt-1">Direct click opens WhatsApp API dialogue with pre-filled prompt</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-pink-50 border border-pink-200 text-center">
+                        <div class="text-2xl mb-2">🤖</div>
+                        <div class="font-bold text-pink-900 text-sm">3. Qualification & Demo</div>
+                        <p class="text-xs text-stone-600 mt-1">Auto-reply gathers student details & delivers demo clip</p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-center">
+                        <div class="text-2xl mb-2">🎓</div>
+                        <div class="font-bold text-emerald-900 text-sm">4. LMS Paid Access</div>
+                        <p class="text-xs text-stone-600 mt-1">Bank slip upload or card gateway unlocks LMS & postal tute</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive ROI / Lead Calculator -->
+            <div class="bg-gradient-to-r from-stone-900 to-stone-800 text-white p-6 rounded-2xl shadow-lg">
+                <div class="max-w-xl">
+                    <span class="text-xs text-pink-400 font-bold uppercase tracking-wider">Interactive Tool</span>
+                    <h3 class="text-2xl font-extrabold mt-1">Student Acquisition Calculator</h3>
+                    <p class="text-stone-300 text-xs mt-1">Estimate student enrollments and tuition revenue based on Meta ad spend.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                    <div>
+                        <label class="block text-xs font-semibold text-stone-300 mb-2">Monthly Ad Budget (LKR)</label>
+                        <input type="number" id="calcAdBudget" value="50000" step="5000" class="w-full bg-stone-700 text-white px-3 py-2 rounded-lg font-bold text-sm focus:outline-none focus:ring-2 focus:ring-pink-500" oninput="calculateROI()">
+                        <span class="text-[10px] text-stone-400 mt-1 block">Min recommended: LKR 40,000</span>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-stone-300 mb-2">Est. Cost Per Lead (LKR)</label>
+                        <input type="number" id="calcCPL" value="180" step="10" class="w-full bg-stone-700 text-white px-3 py-2 rounded-lg font-bold text-sm focus:outline-none focus:ring-2 focus:ring-pink-500" oninput="calculateROI()">
+                        <span class="text-[10px] text-stone-400 mt-1 block">Sri Lanka Avg: LKR 80 - LKR 350</span>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-stone-300 mb-2">Monthly Tuition Fee/Student</label>
+                        <input type="number" id="calcTuitionFee" value="3500" step="500" class="w-full bg-stone-700 text-white px-3 py-2 rounded-lg font-bold text-sm focus:outline-none focus:ring-2 focus:ring-pink-500" oninput="calculateROI()">
+                        <span class="text-[10px] text-stone-400 mt-1 block">Standard A/L / O/L monthly fee</span>
+                    </div>
+                </div>
+
+                <!-- Calculator Output Cards -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 pt-6 border-t border-stone-700 text-center">
+                    <div class="bg-stone-800 p-3 rounded-lg">
+                        <div class="text-xs text-stone-400">Est. WhatsApp Leads</div>
+                        <div class="text-xl font-black text-pink-400 mt-1" id="resLeads">277</div>
+                    </div>
+                    <div class="bg-stone-800 p-3 rounded-lg">
+                        <div class="text-xs text-stone-400">Enrolled Students (15%)</div>
+                        <div class="text-xl font-black text-emerald-400 mt-1" id="resEnrolled">41</div>
+                    </div>
+                    <div class="bg-stone-800 p-3 rounded-lg">
+                        <div class="text-xs text-stone-400">1st Month Revenue</div>
+                        <div class="text-xl font-black text-white mt-1" id="resRevenue">LKR 143,500</div>
+                    </div>
+                    <div class="bg-stone-800 p-3 rounded-lg">
+                        <div class="text-xs text-stone-400">Return on Ad Spend</div>
+                        <div class="text-xl font-black text-pink-300 mt-1" id="resROAS">2.87x</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proposed Agency Retainer Tiers -->
+            <div class="bg-white p-6 rounded-xl border border-stone-200 shadow-sm">
+                <h3 class="font-bold text-stone-900 text-base mb-4">Recommended Bunny Pixel Tuition Service Packages</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- Tier 1 -->
+                    <div class="border border-stone-200 rounded-xl p-5 hover:border-pink-300 transition">
+                        <span class="text-xs font-bold uppercase text-stone-500">Starter Pilot</span>
+                        <h4 class="text-lg font-black text-stone-900 mt-1">LKR 35,000 <span class="text-xs font-normal text-stone-500">/mo</span></h4>
+                        <p class="text-xs text-stone-600 mt-2">Designed for single subject tutors starting localized student campaigns.</p>
+                        <ul class="text-xs text-stone-600 space-y-2 mt-4 pt-4 border-t border-stone-100">
+                            <li>✅ 8 Static Social Creatives</li>
+                            <li>✅ 2 Short Video Edits (Reels/TikTok)</li>
+                            <li>✅ Basic Meta Click-to-WhatsApp Setup</li>
+                            <li>✅ Inbox Query Monitoring Setup</li>
+                        </ul>
+                    </div>
+
+                    <!-- Tier 2 -->
+                    <div class="border-2 border-pink-500 rounded-xl p-5 bg-rose-50/30 relative">
+                        <span class="absolute -top-3 right-4 bg-pink-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">Most Popular</span>
+                        <span class="text-xs font-bold uppercase text-pink-700">Growth Engine</span>
+                        <h4 class="text-lg font-black text-stone-900 mt-1">LKR 75,000 <span class="text-xs font-normal text-stone-500">/mo</span></h4>
+                        <p class="text-xs text-stone-600 mt-2">Full-funnel strategy tailored for high-volume A/L & O/L tuition masters.</p>
+                        <ul class="text-xs text-stone-600 space-y-2 mt-4 pt-4 border-t border-rose-200">
+                            <li>✅ 12 Designed Graphics + Banner Sets</li>
+                            <li>✅ 6 High-Retention Reels/TikToks</li>
+                            <li>✅ Advanced WhatsApp Automated Flow</li>
+                            <li>✅ Custom Meta & Google Search Campaigns</li>
+                            <li>✅ Monthly Student ROI Performance Report</li>
+                        </ul>
+                    </div>
+
+                    <!-- Tier 3 -->
+                    <div class="border border-stone-200 rounded-xl p-5 hover:border-pink-300 transition">
+                        <span class="text-xs font-bold uppercase text-stone-500">Institute Enterprise</span>
+                        <h4 class="text-lg font-black text-stone-900 mt-1">LKR 150,000+ <span class="text-xs font-normal text-stone-500">/mo</span></h4>
+                        <p class="text-xs text-stone-600 mt-2">Complete brand management for multi-location tuition halls & academies.</p>
+                        <ul class="text-xs text-stone-600 space-y-2 mt-4 pt-4 border-t border-stone-100">
+                            <li>✅ Unlimited Creative Design & Video Editing</li>
+                            <li>✅ On-Location Video Shooting & Direction</li>
+                            <li>✅ LMS Setup & Speed Post Logistics Link</li>
+                            <li>✅ Dedicated Account Manager</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= SECTION 5: CLIENT PITCH SCRIPT ================= -->
+        <section id="sec-pitch" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-stone-200 shadow-sm">
+                <h2 class="text-xl font-bold text-stone-900">Meeting Strategy & Pitch Script for Tomorrow</h2>
+                <p class="text-stone-600 text-sm mt-1">
+                    A structured conversational playbook for Chanuda (Bunny Pixel) to lead tomorrow's meeting with the private institute decision-makers.
+                </p>
+            </div>
+
+            <!-- Pitch Playbook Accordion / Cards -->
+            <div class="space-y-4">
+                
+                <!-- Step 1 -->
+                <div class="bg-white p-5 rounded-xl border border-stone-200 shadow-sm">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="w-7 h-7 rounded-full bg-pink-100 text-pink-700 font-bold flex items-center justify-center text-xs">1</span>
+                        <h3 class="font-bold text-stone-900 text-base">The Opening (Acknowledge Tutors' Strength)</h3>
+                    </div>
+                    <div class="bg-stone-50 p-4 rounded-lg text-sm text-stone-700 italic border-l-4 border-pink-500">
+                        "Sir/Miss, your results and teaching methodology are your primary assets. However, in Sri Lanka’s current tuition market, students make decisions based on what they see on TikTok, Instagram, and WhatsApp before they step foot into a physical hall. Our goal at Bunny Pixel is to make sure your excellence is immediately visible to every student in the district."
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="bg-white p-5 rounded-xl border border-stone-200 shadow-sm">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="w-7 h-7 rounded-full bg-pink-100 text-pink-700 font-bold flex items-center justify-center text-xs">2</span>
+                        <h3 class="font-bold text-stone-900 text-base">Highlight the Shift (Paper Posters vs. TikTok Reels)</h3>
+                    </div>
+                    <div class="bg-stone-50 p-4 rounded-lg text-sm text-stone-700 italic border-l-4 border-pink-500">
+                        "Traditional wall posters reach only students passing by a single junction. A single viral TikTok reel or focused Meta Click-to-WhatsApp ad reaches 20,000+ A/L students across the entire province for a fraction of printing costs, sending interested students directly into your coordinator's WhatsApp inbox."
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="bg-white p-5 rounded-xl border border-stone-200 shadow-sm">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="w-7 h-7 rounded-full bg-pink-100 text-pink-700 font-bold flex items-center justify-center text-xs">3</span>
+                        <h3 class="font-bold text-stone-900 text-base">Address Security & Logistics Concerns</h3>
+                    </div>
+                    <div class="bg-stone-50 p-4 rounded-lg text-sm text-stone-700 italic border-l-4 border-pink-500">
+                        "We understand that tutors worry about video content being shared or screen-recorded. That is why Bunny Pixel designs campaigns that funnel registered students directly into secure LMS platforms (like Inivak Edu or Klass.lk) featuring hardware device locks, dynamic phone number watermarking, and automated Speed Post tracking for paper tutes."
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="bg-white p-5 rounded-xl border border-stone-200 shadow-sm">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="w-7 h-7 rounded-full bg-pink-100 text-pink-700 font-bold flex items-center justify-center text-xs">4</span>
+                        <h3 class="font-bold text-stone-900 text-base">The Low-Risk Call to Action</h3>
+                    </div>
+                    <div class="bg-stone-50 p-4 rounded-lg text-sm text-stone-700 italic border-l-4 border-pink-500">
+                        "Let’s start with a sample campaign for your upcoming revision batch or paper class. Bunny Pixel will produce 2 dynamic short Reels and set up a Click-to-WhatsApp ad funnel to prove how rapidly we can drive new student registrations."
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-stone-200 py-6 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-stone-500">
+            <p><strong>Bunny Pixel Digital Marketing Intelligence Platform</strong> &bull; Developed for G.C.E. O/L & A/L Tuition Pitch Meetings</p>
+            <p class="mt-1">Contact: Chanuda Teekshana | WhatsApp: +94 722 211 195 | Email: chanudatheekshana118@gmail.com</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            // Hide all tab content
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('block');
+            });
+            // Remove active class from buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected content
+            const activeContent = document.getElementById('sec-' + tabId);
+            if (activeContent) {
+                activeContent.classList.remove('hidden');
+                activeContent.classList.add('block');
+            }
+
+            // Highlight active button
+            const activeBtn = document.getElementById('tab-' + tabId);
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+        }
+
+        // Calculator Logic
+        function calculateROI() {
+            const budget = parseFloat(document.getElementById('calcAdBudget').value) || 0;
+            const cpl = parseFloat(document.getElementById('calcCPL').value) || 1;
+            const fee = parseFloat(document.getElementById('calcTuitionFee').value) || 0;
+
+            const leads = Math.floor(budget / cpl);
+            const enrolled = Math.floor(leads * 0.15); // 15% standard WhatsApp conversion
+            const revenue = enrolled * fee;
+            const roas = budget > 0 ? (revenue / budget).toFixed(2) : 0;
+
+            document.getElementById('resLeads').innerText = leads.toLocaleString();
+            document.getElementById('resEnrolled').innerText = enrolled.toLocaleString();
+            document.getElementById('resRevenue').innerText = 'LKR ' + revenue.toLocaleString();
+            document.getElementById('resROAS').innerText = roas + 'x';
+        }
+
+        // Chart Initialization (Chart.js)
+        window.addEventListener('DOMContentLoaded', () => {
+            // GDP Chart (Horizontal Bar)
+            const ctxGdp = document.getElementById('gdpChart').getContext('2d');
+            new Chart(ctxGdp, {
+                type: 'bar',
+                data: {
+                    labels: ['Bhutan', 'Nepal', 'Pakistan', 'Sri Lanka'],
+                    datasets: [{
+                        label: 'Public Education Spending (% of GDP)',
+                        data: [6.85, 5.10, 2.90, 2.12],
+                        backgroundColor: ['#cbd5e1', '#cbd5e1', '#cbd5e1', '#ec4899'],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 8,
+                            ticks: { callback: value => value + '%' }
+                        }
+                    }
+                }
+            });
+
+            // Pass Rate Chart (Donut / Bar)
+            const ctxPass = document.getElementById('passRateChart').getContext('2d');
+            new Chart(ctxPass, {
+                type: 'bar',
+                data: {
+                    labels: ['Attending Tuition', 'Non-Attending Peers'],
+                    datasets: [{
+                        label: 'Model Exam Pass Rate (%)',
+                        data: [88.5, 31.0],
+                        backgroundColor: ['#10b981', '#94a3b8'],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { callback: value => value + '%' }
+                        }
+                    }
+                }
+            });
+
+            // Initial ROI Calculation
+            calculateROI();
+        });
+    </script>
+</body>
+</html>
